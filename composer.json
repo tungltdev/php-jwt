@@ -1,7 +1,7 @@
 {
     "name": "tungltdev/php-jwt",
     "version": "1.0",
-    "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
+    "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP.",
     "homepage": "https://github.com/tungltdev/php-jwt",
     "authors": [
         {

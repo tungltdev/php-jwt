@@ -14,10 +14,9 @@ use \DateTime;
  *
  * @category Authentication
  * @package  Authentication_JWT
- * @author   Neuman Vong <neuman@twilio.com>
- * @author   Anant Narayanan <anant@php.net>
- * @license  http://opensource.org/licenses/BSD-3-Clause 3-clause BSD
- * @link     https://github.com/firebase/php-jwt
+ * @author   Tunglt <tunglt.dev@gmail.com>
+ * @license  https://opensource.org/licenses/MIT
+ * @link     https://github.com/tungltdev/php-jwt
  */
 class JWT
 {
@@ -66,9 +65,11 @@ class JWT
      * @uses jsonDecode
      * @uses urlsafeB64Decode
      */
-    public static function decode($jwt, array $allowed_algs = array())
+    public static function decode($jwt, $allowed_algs = array(), $key = null)
     {
-        $key = config('jwt')['secret'];
+        if(empty($key)){
+            $key = config('jwt')['secret'];
+        }
         $timestamp = is_null(static::$timestamp) ? time() : static::$timestamp;
 
         if (empty($key)) {
@@ -154,9 +155,11 @@ class JWT
      * @uses jsonEncode
      * @uses urlsafeB64Encode
      */
-    public static function encode($payload, $alg = 'HS256', $keyId = null, $head = null)
+    public static function encode($payload, $alg = 'HS256', $key = null, $keyId = null, $head = null)
     {
-        $key = config('jwt')['secret'];
+        if(empty($key)){
+            $key = config('jwt')['secret'];
+        }
         $header = array('typ' => 'JWT', 'alg' => $alg);
         if ($keyId !== null) {
             $header['kid'] = $keyId;

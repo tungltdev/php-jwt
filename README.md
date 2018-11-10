@@ -1,32 +1,27 @@
-[![Build Status](https://travis-ci.org/firebase/php-jwt.png?branch=master)](https://travis-ci.org/firebase/php-jwt)
-[![Latest Stable Version](https://poser.pugx.org/firebase/php-jwt/v/stable)](https://packagist.org/packages/firebase/php-jwt)
-[![Total Downloads](https://poser.pugx.org/firebase/php-jwt/downloads)](https://packagist.org/packages/firebase/php-jwt)
-[![License](https://poser.pugx.org/firebase/php-jwt/license)](https://packagist.org/packages/firebase/php-jwt)
-
-PHP-JWT
-=======
-A simple library to encode and decode JSON Web Tokens (JWT) in PHP, conforming to [RFC 7519](https://tools.ietf.org/html/rfc7519).
-
 Installation
 ------------
 
 Use composer to manage your dependencies and download PHP-JWT:
 
 ```bash
+
 composer require tungltdev/php-jwt
 
 Tungltdev\JWT\JwtAuthTokenProvider::class  add to config/app.php
 
-php artisan vendor:publish
+php artisan vendor:publish --provider="Tungltdev\JWT\JwtAuthTokenProvider"
+hoặc
+php artisan vendor:publish --provider="Tungltdev\JWT\JwtAuthTokenProvider" --force
+
 ```
 config key in file config/jwt.php
+
 Example
 -------
 ```php
 <?php
-use \Tungltdev\JWT\JWT;
 
-$token = array(
+$payload  = array(
     "iss" => "http://example.org",
     "aud" => "http://example.com",
     "iat" => 1356999524,
@@ -39,7 +34,7 @@ $token = array(
  * https://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-40
  * for a list of spec-compliant algorithms.
  */
-$jwt = jwtencode($token);
+$jwt = jwtencode($payload); 
 $decoded = jwtdecode($jwt, array('HS256'));
 
 print_r($decoded);
@@ -63,11 +58,41 @@ $decoded = jwtdecode($jwt, array('HS256'));
 
 ?>
 ```
+```
+supported_algs
+------------------------
+    'HS256' => array('hash_hmac', 'SHA256'),
+    'HS512' => array('hash_hmac', 'SHA512'),
+    'HS384' => array('hash_hmac', 'SHA384'),
+    'RS256' => array('openssl', 'SHA256'),
+    'RS384' => array('openssl', 'SHA384'),
+    'RS512' => array('openssl', 'SHA512'),
+```
+
+Support for reserved claim names
+JSON Web Token defines some reserved claim names and defines how they should be used. JWT supports these reserved claim names:
+
+    'exp' (Expiration Time) Claim
+    'nbf' (Not Before Time) Claim
+    'iss' (Issuer) Claim
+    'iat' (Issued At) Claim
+
+Expiration Time Claim
+The exp (expiration time) claim identifies the expiration time on or after which the JWT MUST NOT be accepted for processing. The processing of the exp claim requires that the current date/time MUST be before the expiration date/time listed in the exp claim. Implementers MAY provide for some small leeway, usually no more than a few minutes, to account for clock skew. Its value MUST be a number containing a NumericDate value. Use of this claim is OPTIONAL.
+    
+Not Before Time Claim
+The nbf (not before) claim identifies the time before which the JWT MUST NOT be accepted for processing. The processing of the nbf claim requires that the current date/time MUST be after or equal to the not-before date/time listed in the nbf claim. Implementers MAY provide for some small leeway, usually no more than a few minutes, to account for clock skew. Its value MUST be a number containing a NumericDate value. Use of this claim is OPTIONAL
+
+Issuer Claim
+The iss (issuer) claim identifies the principal that issued the JWT. The processing of this claim is generally application specific. The iss value is a case-sensitive string containing a StringOrURI value. Use of this claim is OPTIONAL.
+
+Issued At Claim
+The iat (issued at) claim identifies the time at which the JWT was issued. This claim can be used to determine the age of the JWT. Its value MUST be a number containing a NumericDate value. Use of this claim is OPTIONAL.
+
 Example with RS256 (openssl)
 ----------------------------
 ```php
 <?php
-use \Tungltdev\JWT\JWT;
 
 $privateKey = <<<EOD
 -----BEGIN RSA PRIVATE KEY-----
@@ -96,17 +121,18 @@ ehde/zUxo6UvS7UrBQIDAQAB
 -----END PUBLIC KEY-----
 EOD;
 
-$token = array(
+
+$payload = array(
     "iss" => "example.org",
     "aud" => "example.com",
     "iat" => 1356999524,
     "nbf" => 1357000000
 );
 
-$jwt = JWT::encode($token, $privateKey, 'RS256');
+$jwt = jwtencode($payload, 'RS256', $privateKey);
 echo "Encode:\n" . print_r($jwt, true) . "\n";
 
-$decoded = JWT::decode($jwt, $publicKey, array('RS256'));
+$decoded = jwtdecode($jwt, array('RS256'), $publicKey);
 
 /*
  NOTE: This will now be an object instead of an associative array. To get
@@ -117,6 +143,3 @@ $decoded_array = (array) $decoded;
 echo "Decode:\n" . print_r($decoded_array, true) . "\n";
 ?>
 ```
-
-Changelog
----------
