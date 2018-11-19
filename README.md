@@ -5,7 +5,7 @@ Use composer to manage your dependencies and download PHP-JWT:
 
 ```bash
 
-composer require tungltdev/php-jwt
+composer require tungltdev/laravel-jwt
 
 Tungltdev\JWT\JwtAuthTokenProvider::class  add to config/app.php
 
