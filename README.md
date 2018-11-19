@@ -1,7 +1,7 @@
 Installation
 ------------
 
-Use composer to manage your dependencies and download PHP-JWT:
+Use composer to manage your dependencies and download LARAVEL-JWT:
 
 ```bash
 
