@@ -16,6 +16,28 @@ php artisan vendor:publish --provider="Tungltdev\JWT\JwtAuthTokenProvider" --for
 ```
 config key in file config/jwt.php
 
+---------------------------
+add Middleware to api
+
+protected $routeMiddleware = [
+        ...
+        'jwt.auth' => \App\Http\Middleware\VerifyJWTToken::class,
+        ...
+
+
+
+api.php add line:
+
+Route::group(['middleware' => 'jwt.auth'], function () {
+    Route::post('/address_member', 'AddressMemberController@store');
+});
+
+
+get info user jwt: 
+$request->jwtUser 
+
+
+dd($request->jwtUser);
 Example
 -------
 ```php
@@ -88,6 +110,7 @@ The iss (issuer) claim identifies the principal that issued the JWT. The process
 
 Issued At Claim
 The iat (issued at) claim identifies the time at which the JWT was issued. This claim can be used to determine the age of the JWT. Its value MUST be a number containing a NumericDate value. Use of this claim is OPTIONAL.
+
 
 Example with RS256 (openssl)
 ----------------------------
