@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 namespace Tungltdev\JWT;
 
 use Illuminate\Support\ServiceProvider;
@@ -23,6 +24,7 @@ class JwtAuthTokenProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/config/jwt.php' => config_path('jwt.php')
         ]);
+        copy(__DIR__ . '/config/VerifyJWTToken.php', config_path('../app/Http/Middleware/VerifyJWTToken.php'));
     }
 
     /**
@@ -45,7 +47,7 @@ class JwtAuthTokenProvider extends ServiceProvider
      */
     public function provides()
     {
-        return array ('jwt');
+        return array('jwt');
     }
 
 }
