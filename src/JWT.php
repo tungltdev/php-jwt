@@ -68,7 +68,7 @@ class JWT
     public static function decode($jwt, $allowed_algs = array(), $key = null)
     {
         if(empty($key)){
-            $key = getenv('JWT_SECRET');
+            $key = @config('jwt')['secret'];
         }
         $timestamp = is_null(static::$timestamp) ? time() : static::$timestamp;
 
@@ -158,7 +158,7 @@ class JWT
     public static function encode($payload, $alg = 'HS256', $key = null, $keyId = null, $head = null)
     {
         if(empty($key)){
-            $key = getenv('JWT_SECRET');
+            $key = @config('jwt')['secret'];
         }
         $header = array('typ' => 'JWT', 'alg' => $alg);
         if ($keyId !== null) {
@@ -382,3 +382,4 @@ class JWT
         return strlen($str);
     }
 }
+
