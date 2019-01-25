@@ -22,9 +22,9 @@ class JwtAuthTokenProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__ . '/config/jwt.php' => config_path('jwt.php')
+            __DIR__ . '/config/jwt.php' => config_path('jwt.php'),
+            __DIR__ . '/config/VerifyJWTToken.php' => config_path('../app/Http/Middleware/VerifyJWTToken.php')
         ]);
-        copy(__DIR__ . '/config/VerifyJWTToken.php', config_path('../app/Http/Middleware/VerifyJWTToken.php'));
     }
 
     /**
@@ -51,3 +51,4 @@ class JwtAuthTokenProvider extends ServiceProvider
     }
 
 }
+

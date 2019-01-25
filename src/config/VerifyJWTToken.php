@@ -19,7 +19,7 @@ class VerifyJWTToken
         if (empty($jwt)) {
             return response()->json([
                 'ok' => 0,
-                'msg' => __('auth.check_jwt'),
+                'msg' => __('auth.check_jwt_empty'),
                 'data' => []
             ]);
         } else {
@@ -28,7 +28,7 @@ class VerifyJWTToken
             } catch (\Exception $e) {
                 return response()->json([
                     'ok' => 0,
-                    'msg' => __('auth.check_jwt'),
+                    'msg' => __('auth.check_jwt_fail'),
                     'data' => []
                 ]);
             }
